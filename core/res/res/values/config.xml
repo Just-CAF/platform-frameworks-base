@@ -4192,8 +4192,13 @@
          1: Right side -->
     <integer name="config_alertSliderLocation">0</integer>
 
-    <!-- Package Manager -->
-    <java-symbol type="array" name="config_disabledComponents" />
+    <!-- The list of components which should be automatically disabled. -->
+    <string-array name="config_disabledComponents" translatable="false">
+    </string-array>
+
+    <!-- The list of components which should be forced to be enabled. -->
+    <string-array name="config_forceEnabledComponents" translatable="false">
+    </string-array>
 
     <!-- Any package that has one of the package names defined below will be prevented
          from using specific sensors in order to stop battery drain -->
