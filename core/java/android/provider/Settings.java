@@ -4501,6 +4501,12 @@ public final class Settings {
         public static final String FP_SUCCESS_VIBRATE = "fp_success_vibrate";
 
         /**
+         * Whether to enable or disable vibration on fingerprint auth error
+         * @hide
+         */
+        public static final String FP_ERROR_VIBRATE = "fp_error_vibrate";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
