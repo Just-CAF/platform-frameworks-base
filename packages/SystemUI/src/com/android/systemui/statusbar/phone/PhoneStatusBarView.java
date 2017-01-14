@@ -25,6 +25,7 @@ import android.annotation.Nullable;
 import android.content.Context;
 import android.content.ContentResolver;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -58,6 +59,13 @@ public class PhoneStatusBarView extends PanelBar implements Callbacks {
     private static final boolean DEBUG_GESTURES = false;
     private static final int NO_VALUE = Integer.MIN_VALUE;
     private final CommandQueue mCommandQueue;
+
+    private int mBasePaddingBottom;
+    private int mBasePaddingLeft;
+    private int mBasePaddingRight;
+    private int mBasePaddingTop;
+
+    private ViewGroup mStatusBarContents;
 
     StatusBar mBar;
     FloatingRotationButton mFloatingRotationButton;
@@ -126,12 +134,30 @@ public class PhoneStatusBarView extends PanelBar implements Callbacks {
         mScrimController = scrimController;
     }
 
+    public void swiftStatusBarItems(int horizontalShift, int verticalShift) {
+        if (mStatusBarContents == null) {
+            return;
+        }
+
+        mStatusBarContents.setPaddingRelative(mBasePaddingLeft + horizontalShift,
+                                              mBasePaddingTop + verticalShift,
+                                              mBasePaddingRight + horizontalShift,
+                                              mBasePaddingBottom - verticalShift);
+        invalidate();
+    }
+
     @Override
     public void onFinishInflate() {
         mBarTransitions.init();
         mBattery = findViewById(R.id.battery);
         mCutoutSpace = findViewById(R.id.cutout_space_view);
         mCenterIconSpace = findViewById(R.id.centered_icon_area);
+        mStatusBarContents = (ViewGroup) findViewById(R.id.status_bar_contents);
+
+        mBasePaddingLeft = mStatusBarContents.getPaddingStart();
+        mBasePaddingTop = mStatusBarContents.getPaddingTop();
+        mBasePaddingRight = mStatusBarContents.getPaddingEnd();
+        mBasePaddingBottom = mStatusBarContents.getPaddingBottom();
 
         updateResources();
     }
