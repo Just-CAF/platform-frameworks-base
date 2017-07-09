@@ -4205,6 +4205,8 @@
         <item>org.telegram.messenger</item>
         <item>org.telegram.messenger.plus</item>
         <item>com.snapchat.android</item>
+	<item>com.facebook.orca</item>
+        <item>com.Slack</item>
     </string-array>
 
     <!-- The list of vendor package signatures that should also be considered
