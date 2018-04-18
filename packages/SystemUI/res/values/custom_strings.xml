@@ -11,5 +11,10 @@
      limitations under the License.
 -->
 <resources>
+
     <string name="quick_settings_nightmode_label">Night mode</string>
+
+    <!-- AOD QS tile -->
+    <string name="quick_settings_aod_label">AOD</string>
+
 </resources>
