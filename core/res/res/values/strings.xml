@@ -5392,4 +5392,8 @@
     <!-- ChooserActivity - Alphabetically sorted apps list label. [CHAR LIMIT=NONE] -->
     <string name="chooser_all_apps_button_label">Apps list</string>
 
+    <!-- Alert slider proc nodes paths. -->
+    <string name="alert_slider_state_path"></string>
+    <string name="alert_slider_uevent_match_path"></string>
+
 </resources>
