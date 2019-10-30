@@ -297,11 +297,11 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
                             positionY2 += res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
                         }
                         if (mTriStateMode == MODE_SILENT) {
-                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_l);
+                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position_l);
                         } else if (mTriStateMode == MODE_VIBRATE) {
                             positionX = res.getDimensionPixelSize(R.dimen.tri_state_middle_dialog_position_l);
                         } else if (mTriStateMode == MODE_NORMAL) {
-                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position_l);
+                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_l);
                         }
                         bg = R.drawable.dialog_tri_state_middle_bg;
                         break;
@@ -337,11 +337,11 @@ public class TriStateUiControllerImpl implements ConfigurationListener, TriState
                             positionY2 += res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
                         }
                         if (mTriStateMode == MODE_SILENT) {
-                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_l);
+                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position_l);
                         } else if (mTriStateMode == MODE_VIBRATE) {
                             positionX = res.getDimensionPixelSize(R.dimen.tri_state_middle_dialog_position_l);
                         } else if (mTriStateMode == MODE_NORMAL) {
-                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_down_dialog_position_l);
+                            positionX = res.getDimensionPixelSize(R.dimen.tri_state_up_dialog_position_l);
                         }
                         bg = R.drawable.dialog_tri_state_middle_bg;
                         break;
