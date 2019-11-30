@@ -3184,6 +3184,8 @@ public final class Settings {
          */
         public static final String SHOW_STATUSBAR_IN_OUT = "show_statusbar_in_out";
 
+        public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
+
         /**
          * Is advanced settings mode turned on. 0 == no, 1 == yes
          * @hide
