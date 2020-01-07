@@ -192,12 +192,12 @@
                     />
         </LinearLayout>
     </LinearLayout>
-    <include layout="@layout/keyguard_eca"
-             android:id="@+id/keyguard_selector_fade_container"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:orientation="vertical"
-             android:layout_gravity="bottom|center_horizontal"
-             android:gravity="center_horizontal"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center_horizontal" />
 
 </com.android.keyguard.KeyguardPINView>
