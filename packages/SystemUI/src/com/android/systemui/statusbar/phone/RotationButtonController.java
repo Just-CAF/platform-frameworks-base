@@ -35,6 +35,7 @@ import android.view.Surface;
 import android.view.View;
 import android.view.WindowManagerGlobal;
 import android.view.accessibility.AccessibilityManager;
+import android.util.Log;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
@@ -249,6 +250,7 @@ public class RotationButtonController {
     }
 
     void onRotationProposal(int rotation, int windowRotation, boolean isValid) {
+        Log.i("JUSTCAF", "Rotation Proposal");
         if (!mRotationButton.acceptRotationProposal()) {
             return;
         }
@@ -279,7 +281,8 @@ public class RotationButtonController {
         }
         mStyleRes = style;
         mRotationButton.updateIcon();
-
+        
+        mIsNavigationBarShowing = true;
         if (mIsNavigationBarShowing) {
             // The navbar is visible so show the icon right away
             showAndLogRotationSuggestion();

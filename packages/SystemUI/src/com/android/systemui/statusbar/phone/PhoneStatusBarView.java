@@ -29,6 +29,7 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.EventLog;
 import android.util.Pair;
+import android.util.Log;
 import android.view.Display;
 import android.view.DisplayCutout;
 import android.view.Gravity;
@@ -46,10 +47,11 @@ import com.android.systemui.R;
 import com.android.systemui.plugins.DarkIconDispatcher;
 import com.android.systemui.plugins.DarkIconDispatcher.DarkReceiver;
 import com.android.systemui.statusbar.CommandQueue;
+import com.android.systemui.statusbar.CommandQueue.Callbacks;
 
 import java.util.Objects;
 
-public class PhoneStatusBarView extends PanelBar {
+public class PhoneStatusBarView extends PanelBar implements Callbacks {
     private static final String TAG = "PhoneStatusBarView";
     private static final boolean DEBUG = StatusBar.DEBUG;
     private static final boolean DEBUG_GESTURES = false;
@@ -57,6 +59,8 @@ public class PhoneStatusBarView extends PanelBar {
     private final CommandQueue mCommandQueue;
 
     StatusBar mBar;
+    FloatingRotationButton mFloatingRotationButton;
+    RotationButtonController mRotationButtonController;
 
     boolean mIsFullyOpenedPanel = false;
     private final PhoneStatusBarTransitions mBarTransitions;
@@ -89,6 +93,17 @@ public class PhoneStatusBarView extends PanelBar {
 
         mBarTransitions = new PhoneStatusBarTransitions(this);
         mCommandQueue = getComponent(context, CommandQueue.class);
+        mFloatingRotationButton = new FloatingRotationButton(context);
+        mRotationButtonController = new RotationButtonController(context,R.style.RotateButtonCCWStart90,mFloatingRotationButton);
+        mRotationButtonController.registerListeners();
+        mCommandQueue.addCallback(this);
+    }
+
+    @Override
+    public void onRotationProposal(final int rotation, boolean isValid) {
+        Log.i("JUSTCAF", "Rotation proposal");
+        final int winRotation = getDisplay().getRotation();
+        mRotationButtonController.onRotationProposal(rotation, winRotation, isValid);
     }
 
     public BarTransitions getBarTransitions() {

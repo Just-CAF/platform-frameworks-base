@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
+import android.util.Log;
 
 import com.android.settingslib.Utils;
 import com.android.systemui.R;
@@ -74,6 +75,7 @@ public class FloatingRotationButton implements RotationButton {
 
     @Override
     public boolean show() {
+        Log.i("JUSTCAF", "Floating roation button show");
         if (!mCanShow || mIsShowing) {
             return false;
         }

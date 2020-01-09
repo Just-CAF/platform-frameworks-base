@@ -42,6 +42,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Pair;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.inputmethod.InputMethodSystemProperty;
 
@@ -1025,6 +1026,7 @@ public class CommandQueue extends IStatusBar.Stub implements CallbackController<
                     break;
                 case MSG_ROTATION_PROPOSAL:
                     for (int i = 0; i < mCallbacks.size(); i++) {
+                        Log.i("JUSTCAF", "Rotation proposal command received");
                         mCallbacks.get(i).onRotationProposal(msg.arg1, msg.arg2 != 0);
                     }
                     break;
