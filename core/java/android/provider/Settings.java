@@ -3180,6 +3180,7 @@ public final class Settings {
         /**
          * Wheter to show the in and out icons in statusbar.
          * boolean (1 or 0).
+         * @hide
          */
         public static final String SHOW_STATUSBAR_IN_OUT = "show_statusbar_in_out";
 
@@ -4523,6 +4524,7 @@ public final class Settings {
          * Whether volume panel should appear on the left (or right).
          * 0 = false (on the right)
          * 1 = true (on the left)
+         * @hide
          */
         public static final String VOLUME_PANEL_ON_LEFT = "volume_panel_on_left";
 
