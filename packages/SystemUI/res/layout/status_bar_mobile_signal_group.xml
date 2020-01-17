@@ -57,37 +57,44 @@
                 android:visibility="gone"
             />
         </FrameLayout>
-        <ImageView
-            android:id="@+id/mobile_type"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingStart="2.5dp"
-            android:paddingEnd="1dp"
-            android:visibility="gone" />
-        <Space
-            android:id="@+id/mobile_roaming_space"
-            android:layout_height="match_parent"
-            android:layout_width="@dimen/roaming_icon_start_padding"
-            android:visibility="gone"
-        />
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical">
-            <com.android.systemui.statusbar.AnimatedImageView
-                android:id="@+id/mobile_signal"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                systemui:hasOverlappingRendering="false"
-            />
+            android:layout_height="match_parent">
             <ImageView
-                android:id="@+id/mobile_roaming"
+                android:id="@+id/mobile_type"
+                android:layout_height="10dp"
+                android:layout_width="wrap_content"
+                android:layout_gravity="top|start"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:paddingStart="0.5dp"
+                android:paddingEnd="1dp"
+                android:paddingTop="0.5dp"
+                android:visibility="gone" />
+            <Space
+                android:id="@+id/mobile_roaming_space"
+                android:layout_height="match_parent"
+                android:layout_width="@dimen/roaming_icon_start_padding"
+                android:visibility="gone"
+            />
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/stat_sys_roaming"
-                android:contentDescription="@string/data_connection_roaming"
-                android:visibility="gone" />
+                android:layout_gravity="center_vertical">
+                <com.android.systemui.statusbar.AnimatedImageView
+                    android:id="@+id/mobile_signal"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    systemui:hasOverlappingRendering="false"
+                />
+                <ImageView
+                    android:id="@+id/mobile_roaming"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/stat_sys_roaming"
+                    android:contentDescription="@string/data_connection_roaming"
+                    android:visibility="gone" />
+            </FrameLayout>
         </FrameLayout>
     </com.android.keyguard.AlphaOptimizedLinearLayout>
 </com.android.systemui.statusbar.StatusBarMobileView>
