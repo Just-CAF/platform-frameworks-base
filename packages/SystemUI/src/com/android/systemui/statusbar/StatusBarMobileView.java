@@ -21,8 +21,8 @@ import static com.android.systemui.plugins.DarkIconDispatcher.isInArea;
 import static com.android.systemui.statusbar.StatusBarIconView.STATE_DOT;
 import static com.android.systemui.statusbar.StatusBarIconView.STATE_HIDDEN;
 import static com.android.systemui.statusbar.StatusBarIconView.STATE_ICON;
-
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -34,6 +34,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.provider.Settings;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.settingslib.graph.SignalDrawable;
@@ -62,6 +63,9 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
     private DualToneHandler mDualToneHandler;
 
     private ImageView mVolte;
+    private Context mContext;
+
+    private ContentResolver mContentResolver;
 
     public static StatusBarMobileView fromContext(Context context, String slot) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -76,19 +80,23 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
 
     public StatusBarMobileView(Context context) {
         super(context);
+        mContext = context;
     }
 
     public StatusBarMobileView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
     }
 
     public StatusBarMobileView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mContext = context;
     }
 
     public StatusBarMobileView(Context context, AttributeSet attrs, int defStyleAttr,
             int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        mContext = context;
     }
 
     @Override
@@ -116,6 +124,8 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
 
         mMobileDrawable = new SignalDrawable(getContext());
         mMobile.setImageDrawable(mMobileDrawable);
+
+        mContentResolver = mContext.getContentResolver();
 
         initDotView();
     }
@@ -181,7 +191,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         mMobileRoamingSpace.setVisibility(mState.roaming ? View.VISIBLE : View.GONE);
         mIn.setVisibility(mState.activityIn ? View.VISIBLE : View.GONE);
         mOut.setVisibility(mState.activityOut ? View.VISIBLE : View.GONE);
-        mInoutContainer.setVisibility((mState.activityIn || mState.activityOut)
+        mInoutContainer.setVisibility((getInOutVisibleStatus() && (mState.activityIn || mState.activityOut))
                 ? View.VISIBLE : View.GONE);
         if (mState.volteId > 0 ) {
             mVolte.setImageResource(mState.volteId);
@@ -217,7 +227,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         mMobileRoamingSpace.setVisibility(state.roaming ? View.VISIBLE : View.GONE);
         mIn.setVisibility(state.activityIn ? View.VISIBLE : View.GONE);
         mOut.setVisibility(state.activityOut ? View.VISIBLE : View.GONE);
-        mInoutContainer.setVisibility((state.activityIn || state.activityOut)
+        mInoutContainer.setVisibility((getInOutVisibleStatus() && (state.activityIn || state.activityOut))
                 ? View.VISIBLE : View.GONE);
 
         if (mState.volteId != state.volteId) {
@@ -337,6 +347,11 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         }else {
             return false;
         }
+    }
+
+    private boolean getInOutVisibleStatus() {
+        return Settings.System.getInt(mContentResolver, Settings.System.SHOW_STATUSBAR_IN_OUT, 0) == 1
+			? true : false;
     }
 
     @Override

@@ -3178,6 +3178,12 @@ public final class Settings {
         public static final int END_BUTTON_BEHAVIOR_DEFAULT = END_BUTTON_BEHAVIOR_SLEEP;
 
         /**
+         * Wheter to show the in and out icons in statusbar.
+         * boolean (1 or 0).
+         */
+        public static final String SHOW_STATUSBAR_IN_OUT = "show_statusbar_in_out";
+
+        /**
          * Is advanced settings mode turned on. 0 == no, 1 == yes
          * @hide
          */
