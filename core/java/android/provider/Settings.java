@@ -12786,6 +12786,14 @@ public final class Settings {
         public static final String EMERGENCY_AFFORDANCE_NEEDED = "emergency_affordance_needed";
 
         /**
+         * Enable emergency button in power menu.
+         * The value is a boolean (1 or 0).
+         * @hide
+         */
+        public static final String SHOW_EMERGENCY_BUTTON_POWER_MENU =
+                "show_emergency_button_power_menu";
+
+        /**
          * Whether to enable automatic system server heap dumps. This only works on userdebug or
          * eng builds, not on user builds. This is set by the user and overrides the config value.
          * 1 means enable, 0 means disable.
