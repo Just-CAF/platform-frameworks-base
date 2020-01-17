@@ -102,8 +102,9 @@ public class VibratorService extends IVibratorService.Stub
 
     // Max amplitudes for scale levels. If one is not listed, then the max amplitude is the default
     // max amplitude.
-    private static final int SCALE_VERY_LOW_MAX_AMPLITUDE = 168; // 2/3 * 255
-    private static final int SCALE_LOW_MAX_AMPLITUDE = 192; // 3/4 * 255
+    private static final int SCALE_VERY_LOW_MAX_AMPLITUDE = 85; // 1/3 * 255
+    private static final int SCALE_LOW_MAX_AMPLITUDE = 128; // 1/2 * 255
+    private static final int SCALE_HIGH_MAX_AMPLITURE = 191; // 3/4 * 255
 
     // If a vibration is playing for longer than 5s, it's probably not haptic feedback.
     private static final long MAX_HAPTIC_FEEDBACK_DURATION = 5000;
@@ -399,7 +400,7 @@ public class VibratorService extends IVibratorService.Stub
                 new ScaleLevel(SCALE_VERY_LOW_GAMMA, SCALE_VERY_LOW_MAX_AMPLITUDE));
         mScaleLevels.put(SCALE_LOW, new ScaleLevel(SCALE_LOW_GAMMA, SCALE_LOW_MAX_AMPLITUDE));
         mScaleLevels.put(SCALE_NONE, new ScaleLevel(SCALE_NONE_GAMMA));
-        mScaleLevels.put(SCALE_HIGH, new ScaleLevel(SCALE_HIGH_GAMMA));
+        mScaleLevels.put(SCALE_HIGH, new ScaleLevel(SCALE_HIGH_GAMMA, SCALE_HIGH_MAX_AMPLITURE));
         mScaleLevels.put(SCALE_VERY_HIGH, new ScaleLevel(SCALE_VERY_HIGH_GAMMA));
 
         ServiceManager.addService(EXTERNAL_VIBRATOR_SERVICE, new ExternalVibratorService());
