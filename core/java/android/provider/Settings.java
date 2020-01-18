@@ -3409,13 +3409,6 @@ public final class Settings {
                 "lockscreen_quick_unlock_control";
 
         /**
-         * Whether to enable the floating rotation button
-         * @hide
-         */
-        public static final String SYSTEM_FLOATINGROTATIONBUTTON_ENABLED =
-                "floatingrotationbutton_enabled";
-
-        /**
          * A formatted string of the next alarm that is set, or the empty string
          * if there is no alarm set.
          *
@@ -11886,6 +11879,13 @@ public final class Settings {
          * @see com.android.server.am.ActivityManagerConstants
          */
         public static final String ACTIVITY_MANAGER_CONSTANTS = "activity_manager_constants";
+
+        /**
+         * Whether to enable the floating rotation button
+         * @hide
+         */
+        public static final String SYSTEM_FLOATINGROTATIONBUTTON_ENABLED
+                = "floatingrotationbutton_enabled";
 
         /**
          * Feature flag to enable or disable the activity starts logging feature.
