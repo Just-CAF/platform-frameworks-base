@@ -23,13 +23,13 @@ import static com.android.systemui.SysUiServiceProvider.getComponent;
 
 import android.annotation.Nullable;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.EventLog;
 import android.util.Pair;
-import android.util.Log;
 import android.view.Display;
 import android.view.DisplayCutout;
 import android.view.Gravity;
@@ -40,6 +40,7 @@ import android.view.WindowInsets;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.provider.Settings;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.EventLogTags;
@@ -93,17 +94,24 @@ public class PhoneStatusBarView extends PanelBar implements Callbacks {
 
         mBarTransitions = new PhoneStatusBarTransitions(this);
         mCommandQueue = getComponent(context, CommandQueue.class);
-        mFloatingRotationButton = new FloatingRotationButton(context);
-        mRotationButtonController = new RotationButtonController(context,R.style.RotateButtonCCWStart90,mFloatingRotationButton);
-        mRotationButtonController.registerListeners();
-        mCommandQueue.addCallback(this);
+        if (getFrbEnabled(context)) {
+            mFloatingRotationButton = new FloatingRotationButton(context);
+            mRotationButtonController = new RotationButtonController(context,R.style.RotateButtonCCWStart90,mFloatingRotationButton);
+            mRotationButtonController.registerListeners();
+            mCommandQueue.addCallback(this);
+        }
     }
 
     @Override
     public void onRotationProposal(final int rotation, boolean isValid) {
-        Log.i("JUSTCAF", "Rotation proposal");
         final int winRotation = getDisplay().getRotation();
         mRotationButtonController.onRotationProposal(rotation, winRotation, isValid);
+    }
+
+    private boolean getFrbEnabled(Context context) {
+        ContentResolver mContentResolver = context.getContentResolver();
+        return Settings.Global.getInt(mContentResolver, Settings.Global.SYSTEM_FLOATINGROTATIONBUTTON_ENABLED, 1) == 1
+			? true : false;
     }
 
     public BarTransitions getBarTransitions() {
