@@ -163,7 +163,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     }
 
     private void setBuildText() {
-        TextView v = findViewById(R.id.build);
+        /*TextView v = findViewById(R.id.build);
         if (v == null) return;
         if (DevelopmentSettingsEnabler.isDevelopmentSettingsEnabled(mContext)) {
             v.setText(mContext.getString(
@@ -173,7 +173,8 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
             v.setVisibility(View.VISIBLE);
         } else {
             v.setVisibility(View.GONE);
-        }
+        }*/
+        return;
     }
 
     private void updateAnimator(int width) {
