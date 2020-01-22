@@ -148,9 +148,9 @@ class NotificationSectionsManager implements StackScrollAlgorithm.SectionProvide
     }
 
     private void adjustGentleHeaderVisibilityAndPosition(int firstGentleNotifIndex) {
-        final boolean showGentleHeader =
-                firstGentleNotifIndex != -1
-                        && mStatusBarStateController.getState() != StatusBarState.KEYGUARD;
+        final boolean showGentleHeader = false;
+                //firstGentleNotifIndex != -1
+                //        && mStatusBarStateController.getState() != StatusBarState.KEYGUARD;
         final int currentHeaderIndex = mParent.indexOfChild(mGentleHeader);
 
         if (!showGentleHeader) {
