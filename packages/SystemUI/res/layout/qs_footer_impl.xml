@@ -94,46 +94,61 @@
                     android:layout_gravity="center"
                     android:scaleType="centerInside"/>
             </com.android.systemui.statusbar.phone.MultiUserSwitch>
-
-            <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
-                android:id="@+id/settings_button_container"
-                android:layout_width="@dimen/qs_footer_action_button_size"
-                android:layout_height="@dimen/qs_footer_action_button_size"
-                android:clipChildren="false"
-                android:clipToPadding="false">
-
-                <com.android.systemui.statusbar.phone.SettingsButton
-                    android:id="@+id/settings_button"
-                    style="@android:style/Widget.Material.Button.Borderless"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:padding="@dimen/qs_footer_icon_padding"
-                    android:background="@drawable/ripple_drawable"
-                    android:contentDescription="@string/accessibility_quick_settings_settings"
-                    android:src="@drawable/ic_settings"
-                    android:scaleType="centerInside"
-                    android:tint="?android:attr/colorForeground"/>
-
-                <com.android.systemui.statusbar.AlphaOptimizedImageView
-                    android:id="@+id/tuner_icon"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="36dp"
-                    android:paddingEnd="4dp"
-                    android:src="@drawable/tuner"
-                    android:tint="?android:attr/textColorTertiary"
-                    android:visibility="invisible"/>
-
-            </com.android.systemui.statusbar.AlphaOptimizedFrameLayout>
         </com.android.keyguard.AlphaOptimizedLinearLayout>
     </LinearLayout>
-    <View
-        android:id="@+id/qs_drag_handle_view"
-        android:layout_width="24dp"
-        android:layout_height="4dp"
-        android:layout_marginBottom="16dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:background="@drawable/qs_footer_drag_handle" />
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:systemui="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" >
 
+        <com.android.systemui.statusbar.policy.DateView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:paddingStart="@dimen/qs_footer_icon_padding"
+            android:textAppearance="@style/TextAppearance.QS.Status"
+            systemui:datePattern="@string/abbrev_wday_month_day_no_year_alarm" />
+
+        <View
+            android:id="@+id/qs_drag_handle_view"
+            android:layout_width="24dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:background="@drawable/qs_footer_drag_handle" />
+
+        <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
+            android:id="@+id/settings_button_container"
+            android:layout_width="@dimen/qs_footer_action_button_size"
+            android:layout_height="@dimen/qs_footer_action_button_size"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:layout_gravity="end">
+
+            <com.android.systemui.statusbar.phone.SettingsButton
+                android:id="@+id/settings_button"
+                style="@android:style/Widget.Material.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/ripple_drawable"
+                android:contentDescription="@string/accessibility_quick_settings_settings"
+                android:src="@drawable/ic_settings"
+                android:scaleType="centerInside"
+                android:tint="?android:attr/colorForeground"/>
+
+            <com.android.systemui.statusbar.AlphaOptimizedImageView
+                android:id="@+id/tuner_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/tuner"
+                android:tint="?android:attr/textColorTertiary"
+                android:visibility="invisible"/>
+
+        </com.android.systemui.statusbar.AlphaOptimizedFrameLayout>
+    </FrameLayout>
 </com.android.systemui.qs.QSFooterImpl>

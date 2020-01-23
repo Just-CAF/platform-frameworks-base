@@ -60,6 +60,7 @@ import com.android.systemui.qs.TouchAnimator.Builder;
 import com.android.systemui.statusbar.phone.MultiUserSwitch;
 import com.android.systemui.statusbar.phone.SettingsButton;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
+import com.android.systemui.statusbar.policy.DateView;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener;
 import com.android.systemui.tuner.TunerService;
@@ -76,6 +77,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     private final UserInfoController mUserInfoController;
     private final DeviceProvisionedController mDeviceProvisionedController;
     private SettingsButton mSettingsButton;
+    private DateView mDate;
     protected View mSettingsContainer;
     private PageIndicator mPageIndicator;
 
@@ -139,6 +141,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         mPageIndicator = findViewById(R.id.footer_page_indicator);
 
         mSettingsButton = findViewById(R.id.settings_button);
+        mDate = findViewById(R.id.date);
         mSettingsContainer = findViewById(R.id.settings_button_container);
         mSettingsButton.setOnClickListener(this);
 
@@ -185,8 +188,6 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         int defSpace = mContext.getResources().getDimensionPixelOffset(R.dimen.default_gear_space);
 
         mSettingsCogAnimator = new Builder()
-                .addFloat(mSettingsContainer, "translationX",
-                        isLayoutRtl() ? (remaining - defSpace) : -(remaining - defSpace), 0)
                 .addFloat(mSettingsButton, "rotation", -120, 0)
                 .build();
 
@@ -322,7 +323,8 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         final boolean isDemo = UserManager.isDeviceInDemoMode(mContext);
         mMultiUserSwitch.setVisibility(showUserSwitcher() ? View.VISIBLE : View.INVISIBLE);
         mEditContainer.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
-        mSettingsButton.setVisibility(isDemo || !mExpanded ? View.INVISIBLE : View.VISIBLE);
+        mSettingsButton.setVisibility(isDemo || !mExpanded ? View.VISIBLE : View.VISIBLE);
+        mDate.setVisibility(mExpanded ? View.INVISIBLE : View.VISIBLE);
     }
 
     private boolean showUserSwitcher() {
