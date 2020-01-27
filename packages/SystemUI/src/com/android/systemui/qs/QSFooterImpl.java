@@ -144,6 +144,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         mDate = findViewById(R.id.date);
         mSettingsContainer = findViewById(R.id.settings_button_container);
         mSettingsButton.setOnClickListener(this);
+        mSettingsButton.setClickable(true);
 
         mMultiUserSwitch = findViewById(R.id.multi_user_switch);
         mMultiUserAvatar = mMultiUserSwitch.findViewById(R.id.multi_user_avatar);
@@ -313,7 +314,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     private void updateClickabilities() {
         mMultiUserSwitch.setClickable(mMultiUserSwitch.getVisibility() == View.VISIBLE);
         mEdit.setClickable(mEdit.getVisibility() == View.VISIBLE);
-        mSettingsButton.setClickable(mSettingsButton.getVisibility() == View.VISIBLE);
+        mSettingsButton.setClickable(true);
     }
 
     private void updateVisibilities() {
@@ -351,7 +352,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     @Override
     public void onClick(View v) {
         // Don't do anything until view are unhidden
-        if (!mExpanded) {
+        if (!mExpanded && v != mSettingsButton) {
             return;
         }
 
@@ -363,8 +364,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
                 return;
             }
             MetricsLogger.action(mContext,
-                    mExpanded ? MetricsProto.MetricsEvent.ACTION_QS_EXPANDED_SETTINGS_LAUNCH
-                            : MetricsProto.MetricsEvent.ACTION_QS_COLLAPSED_SETTINGS_LAUNCH);
+                    MetricsProto.MetricsEvent.ACTION_QS_EXPANDED_SETTINGS_LAUNCH);
             if (mSettingsButton.isTunerClick()) {
                 mActivityStarter.postQSRunnableDismissingKeyguard(() -> {
                     if (TunerService.isTunerEnabled(mContext)) {
