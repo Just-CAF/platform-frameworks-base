@@ -135,6 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:padding="@dimen/qs_footer_settings_icon_padding"
                 android:background="@drawable/ripple_drawable"
                 android:contentDescription="@string/accessibility_quick_settings_settings"
                 android:src="@drawable/ic_settings"
