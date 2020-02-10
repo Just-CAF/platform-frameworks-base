@@ -66,7 +66,9 @@ class MediaArtworkProcessor @Inject constructor() {
                 inBitmap = oldIn.copy(Bitmap.Config.ARGB_8888, false /* isMutable */)
                 oldIn.recycle()
             }
-            val outBitmap = Bitmap.createBitmap(inBitmap.width, inBitmap.height,
+
+            var outBitmap: Bitmap?
+            /*outBitmap = Bitmap.createBitmap(inBitmap.width, inBitmap.height,
                     Bitmap.Config.ARGB_8888)
 
             input = Allocation.createFromBitmap(renderScript, inBitmap,
@@ -76,21 +78,26 @@ class MediaArtworkProcessor @Inject constructor() {
             blur.setRadius(BLUR_RADIUS)
             blur.setInput(input)
             blur.forEach(output)
-            output.copyTo(outBitmap)
+            output.copyTo(outBitmap)*/
+
+            outBitmap = inBitmap.copy(Bitmap.Config.ARGB_8888, true /* isMutable */)
 
             val swatch = MediaNotificationProcessor.findBackgroundSwatch(artwork)
 
             val canvas = Canvas(outBitmap)
             canvas.drawColor(ColorUtils.setAlphaComponent(swatch.rgb, COLOR_ALPHA))
+
             return outBitmap
         } catch (ex: IllegalArgumentException) {
             Log.e(TAG, "error while processing artwork", ex)
             return null
         } finally {
-            input?.destroy()
-            output?.destroy()
+            if (true == false) {
+                input?.destroy()
+                output?.destroy()
+                inBitmap?.recycle()
+            }
             blur.destroy()
-            inBitmap?.recycle()
         }
     }
 
