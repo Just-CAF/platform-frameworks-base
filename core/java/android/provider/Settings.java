@@ -6648,6 +6648,12 @@ public final class Settings {
          */
         public static final String ZEN_DURATION = "zen_duration";
 
+        /**
+         * Wheter to show media art of lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_MEDIA_METADATA = "lockscreen_media_metadata";
+
         private static final Validator ZEN_DURATION_VALIDATOR = ANY_INTEGER_VALIDATOR;
 
         /** @hide */ public static final int ZEN_DURATION_PROMPT = -1;
