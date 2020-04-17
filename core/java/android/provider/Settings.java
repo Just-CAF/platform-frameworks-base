@@ -6788,6 +6788,13 @@ public final class Settings {
                 "accessibility_soft_keyboard_mode";
 
         /**
+         * Wheter to have transparent background on lockscreen
+         * notification. Looks good with custom clock faces
+         */
+        public static final String LOCKSCREEN_TRANSLUCENT_NOTIFICATIONS_BG_ENABLED
+                = "lockscreen_translucent_notifications_bg_enabled";
+
+        /**
          * Default soft keyboard behavior.
          *
          * @hide
