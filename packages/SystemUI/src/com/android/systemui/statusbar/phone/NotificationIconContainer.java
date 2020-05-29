@@ -128,7 +128,8 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
         }
     }.setDuration(CONTENT_FADE_DURATION);
 
-    private static final int MAX_VISIBLE_ICONS_ON_LOCK = 5;
+    private static final int MAX_VISIBLE_ICONS_ON_LOCK = 0;
+    private static final int MAX_VISIBLE_ICONS_ON_AOD = 5;
     public static final int MAX_STATIC_ICONS = 4;
     private static final int MAX_DOTS = 1;
 
@@ -378,13 +379,23 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
         float translationX = getActualPaddingStart();
         int firstOverflowIndex = -1;
         int childCount = getChildCount();
-        int maxVisibleIcons = mOnLockScreen ? MAX_VISIBLE_ICONS_ON_LOCK :
-                mIsStaticLayout ? MAX_STATIC_ICONS : childCount;
+//        int maxVisibleIcons = mOnLockScreen ? MAX_VISIBLE_ICONS_ON_LOCK :
+//                mIsStaticLayout ? MAX_STATIC_ICONS : childCount;
         float layoutEnd = getLayoutEnd();
         float overflowStart = getMaxOverflowStart();
         mVisualOverflowStart = 0;
         mFirstVisibleIconState = null;
         boolean hasAmbient = mSpeedBumpIndex != -1 && mSpeedBumpIndex < getChildCount();
+
+        int maxVisibleIcons;
+        if (mDozing) {
+            maxVisibleIcons = MAX_VISIBLE_ICONS_ON_AOD;
+        } else if (mOnLockScreen) {
+            maxVisibleIcons = MAX_VISIBLE_ICONS_ON_LOCK;
+        } else {
+            maxVisibleIcons = mIsStaticLayout ? MAX_STATIC_ICONS : childCount;
+        }
+
         for (int i = 0; i < childCount; i++) {
             View view = getChildAt(i);
             IconState iconState = mIconStates.get(view);
