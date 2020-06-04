@@ -4359,4 +4359,11 @@
 
     <!-- Whether notify fingerprint client of successful cancelled authentication -->
     <bool name="config_notifyClientOnFingerprintCancelSuccess">false</bool>
+
+    <!-- Extended restart -->
+    <string-array translatable="false" name="config_extendedGlobalActionsList">
+      <item>quick_restart</item>
+      <item>recovery</item>
+      <item>bootloader</item>
+    </string-array>
 </resources>
