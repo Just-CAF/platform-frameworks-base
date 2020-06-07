@@ -18200,36 +18200,48 @@ public class PackageManagerService extends IPackageManager.Stub
         int count = 0;
         final String packageName = pkg.packageName;
 
+        boolean handlesWebUris = false;
+        final boolean alreadyVerified;
         synchronized (mPackages) {
             // If this is a new install and we see that we've already run verification for this
             // package, we have nothing to do: it means the state was restored from backup.
-            if (!replacing) {
-                IntentFilterVerificationInfo ivi =
-                        mSettings.getIntentFilterVerificationLPr(packageName);
-                if (ivi != null) {
-                    if (DEBUG_DOMAIN_VERIFICATION) {
-                        Slog.i(TAG, "Package " + packageName+ " already verified: status="
-                                + ivi.getStatusString());
-                    }
-                    return;
+            final IntentFilterVerificationInfo ivi =
+                    mSettings.getIntentFilterVerificationLPr(packageName);
+            alreadyVerified = (ivi != null);
+            if (!replacing && alreadyVerified) {
+                if (DEBUG_DOMAIN_VERIFICATION) {
+                    Slog.i(TAG, "Package " + packageName + " already verified: status="
+                            + ivi.getStatusString());
                 }
+                return;
             }
 
-            // If any filters need to be verified, then all need to be.
+            // If any filters need to be verified, then all need to be.  In addition, we need to
+            // know whether an updating app has any web navigation intent filters, to re-
+            // examine handling policy even if not re-verifying.
             boolean needToVerify = false;
             for (PackageParser.Activity a : pkg.activities) {
                 for (ActivityIntentInfo filter : a.intents) {
+                    if (filter.handlesWebUris(true)) {
+                        handlesWebUris = true;
+                    }
                     if (filter.needsVerification() && needsNetworkVerificationLPr(filter)) {
                         if (DEBUG_DOMAIN_VERIFICATION) {
                             Slog.d(TAG,
                                     "Intent filter needs verification, so processing all filters");
                         }
                         needToVerify = true;
+                        // It's safe to break out here because filter.needsVerification()
+                        // can only be true if filter.handlesWebUris(true) returns true, so
+                        // we've already noted that.
                         break;
                     }
                 }
             }
 
+            // Note whether this app publishes any web navigation handling support at all,
+            // and whether there are any web-nav filters that fit the profile for running
+            // a verification pass now.
             if (needToVerify) {
                 final int verificationId = mIntentFilterVerificationToken++;
                 for (PackageParser.Activity a : pkg.activities) {
@@ -18247,13 +18259,23 @@ public class PackageManagerService extends IPackageManager.Stub
         }
 
         if (count > 0) {
+            // count > 0 means that we're running a full verification pass
             if (DEBUG_DOMAIN_VERIFICATION) Slog.d(TAG, "Starting " + count
                     + " IntentFilter verification" + (count > 1 ? "s" : "")
                     +  " for userId:" + userId);
             mIntentFilterVerifier.startVerifications(userId);
+        } else if (alreadyVerified && handlesWebUris) {
+            // App used autoVerify in the past, no longer does, but still handles web
+            // navigation starts.
+            if (DEBUG_DOMAIN_VERIFICATION) {
+                Slog.d(TAG, "App changed web filters but no longer verifying - resetting policy");
+            }
+            synchronized (mPackages) {
+                clearIntentFilterVerificationsLPw(packageName, userId);
+            }
         } else {
             if (DEBUG_DOMAIN_VERIFICATION) {
-                Slog.d(TAG, "No filters or not all autoVerify for " + packageName);
+                Slog.d(TAG, "No web filters or no prior verify policy for " + packageName);
             }
         }
     }
@@ -19162,10 +19184,11 @@ public class PackageManagerService extends IPackageManager.Stub
      * Tries to delete system package.
      */
     private void deleteSystemPackageLIF(DeletePackageAction action, PackageSetting deletedPs,
-            int[] allUserHandles, int flags, PackageRemovedInfo outInfo, boolean writeSettings)
+            int[] allUserHandles, int flags, @Nullable PackageRemovedInfo outInfo,
+            boolean writeSettings)
             throws SystemDeleteException {
-        final boolean applyUserRestrictions
-                = (allUserHandles != null) && (outInfo.origUsers != null);
+        final boolean applyUserRestrictions =
+                (allUserHandles != null) && outInfo != null && (outInfo.origUsers != null);
         final PackageParser.Package deletedPkg = deletedPs.pkg;
         // Confirm if the system package has been updated
         // An updated system app can be deleted. This will also have to restore
@@ -19186,19 +19209,21 @@ public class PackageManagerService extends IPackageManager.Stub
             }
         }
 
-        // Delete the updated package
-        outInfo.isRemovedPackageSystemUpdate = true;
-        if (outInfo.removedChildPackages != null) {
-            final int childCount = (deletedPs.childPackageNames != null)
-                    ? deletedPs.childPackageNames.size() : 0;
-            for (int i = 0; i < childCount; i++) {
-                String childPackageName = deletedPs.childPackageNames.get(i);
-                if (disabledPs.childPackageNames != null && disabledPs.childPackageNames
-                        .contains(childPackageName)) {
-                    PackageRemovedInfo childInfo = outInfo.removedChildPackages.get(
-                            childPackageName);
-                    if (childInfo != null) {
-                        childInfo.isRemovedPackageSystemUpdate = true;
+        if (outInfo != null) {
+            // Delete the updated package
+            outInfo.isRemovedPackageSystemUpdate = true;
+            if (outInfo.removedChildPackages != null) {
+                final int childCount = (deletedPs.childPackageNames != null)
+                        ? deletedPs.childPackageNames.size() : 0;
+                for (int i = 0; i < childCount; i++) {
+                    String childPackageName = deletedPs.childPackageNames.get(i);
+                    if (disabledPs.childPackageNames != null && disabledPs.childPackageNames
+                            .contains(childPackageName)) {
+                        PackageRemovedInfo childInfo = outInfo.removedChildPackages.get(
+                                childPackageName);
+                        if (childInfo != null) {
+                            childInfo.isRemovedPackageSystemUpdate = true;
+                        }
                     }
                 }
             }
@@ -19231,7 +19256,8 @@ public class PackageManagerService extends IPackageManager.Stub
         if (DEBUG_REMOVE) Slog.d(TAG, "Re-installing system package: " + disabledPs);
         try {
             installPackageFromSystemLIF(disabledPs.codePathString, allUserHandles,
-                    outInfo.origUsers, deletedPs.getPermissionsState(), writeSettings);
+                    outInfo == null ? null : outInfo.origUsers, deletedPs.getPermissionsState(),
+                    writeSettings);
         } catch (PackageManagerException e) {
             Slog.w(TAG, "Failed to restore system package:" + deletedPkg.packageName + ": "
                     + e.getMessage());
@@ -23832,6 +23858,13 @@ public class PackageManagerService extends IPackageManager.Stub
             mPermissionManager.updateAllPermissions(
                     StorageManager.UUID_PRIVATE_INTERNAL, true, mPackages.values(),
                     mPermissionCallback);
+        }
+    }
+
+    boolean readPermissionStateForUser(@UserIdInt int userId) {
+        synchronized (mPackages) {
+            mSettings.readPermissionStateForUserSyncLPr(userId);
+            return mSettings.areDefaultRuntimePermissionsGrantedLPr(userId);
         }
     }
 
