@@ -4540,15 +4540,6 @@ public final class Settings {
         public static final String VOLUME_PANEL_ON_LEFT = "volume_panel_on_left";
 
         /**
-         * Whether user can swap the order of the Alert Slider.
-         * * Whether user can invert the order of the Alert Slider.
-         * 0: Default
-         * 1: Inverted
-         * @hide
-         */
-        public static final String ALERT_SLIDER_ORDER = "alert_slider_order";
-
-        /**
          * Preferred silent mode for Alert Slider..
          * 0: Alarms only.
          * 1: Total silence
