@@ -3184,6 +3184,9 @@ public final class Settings {
          */
         public static final String SHOW_STATUSBAR_IN_OUT = "show_statusbar_in_out";
 
+        /**
+         * @hide
+         */
         public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
 
         /**
@@ -6822,6 +6825,8 @@ public final class Settings {
         /**
          * Wheter to have transparent background on lockscreen
          * notification. Looks good with custom clock faces
+         *
+         * @hide
          */
         public static final String LOCKSCREEN_TRANSLUCENT_NOTIFICATIONS_BG_ENABLED
                 = "lockscreen_translucent_notifications_bg_enabled";
