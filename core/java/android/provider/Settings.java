@@ -3185,6 +3185,10 @@ public final class Settings {
         public static final String SHOW_STATUSBAR_IN_OUT = "show_statusbar_in_out";
 
         /**
+         * Display style of the status bar battery information
+         * 0: Display the battery an icon in portrait mode
+         * 1: Display the battery as a circle
+         * 2: Display the battery as plain text
          * @hide
          */
         public static final String STATUS_BAR_BATTERY_STYLE = "status_bar_battery_style";
