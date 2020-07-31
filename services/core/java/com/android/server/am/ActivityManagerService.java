@@ -3633,7 +3633,7 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     @Override
     public void crashApplication(int uid, int initialPid, String packageName, int userId,
-            String message) {
+            String message, boolean force) {
         if (checkCallingPermission(android.Manifest.permission.FORCE_STOP_PACKAGES)
                 != PackageManager.PERMISSION_GRANTED) {
             String msg = "Permission Denial: crashApplication() from pid="
@@ -3645,7 +3645,8 @@ public class ActivityManagerService extends IActivityManager.Stub
         }
 
         synchronized(this) {
-            mAppErrors.scheduleAppCrashLocked(uid, initialPid, packageName, userId, message);
+            mAppErrors.scheduleAppCrashLocked(uid, initialPid, packageName, userId,
+                    message, force);
         }
     }
 
@@ -3807,10 +3808,11 @@ public class ActivityManagerService extends IActivityManager.Stub
                 doLowMem = false;
             }
 
-            if (mUxPerf != null && !mForceStopKill) {
+            if (mUxPerf != null && !mForceStopKill && !app.isNotResponding() && !app.isCrashing()) {
                 mUxPerf.perfUXEngine_events(BoostFramework.UXE_EVENT_KILL, 0, app.processName, 0);
-                mUxPerf.perfHint(BoostFramework.VENDOR_HINT_KILL, app.processName, pid, 0);
             }
+            if (mUxPerf != null)
+                mUxPerf.perfHint(BoostFramework.VENDOR_HINT_KILL, app.processName, pid, 0);//sending Kill notification to PreKill iresspective of Kill reason.
 
             EventLog.writeEvent(EventLogTags.AM_PROC_DIED, app.userId, app.pid, app.processName,
                     app.setAdj, app.setProcState);
@@ -4710,9 +4712,6 @@ public class ActivityManagerService extends IActivityManager.Stub
             } else {
                 Slog.i(TAG, "Force stopping u" + userId + ": " + reason);
             }
-            if (mUxPerf != null) {
-                mUxPerf.perfHint(BoostFramework.VENDOR_HINT_KILL, packageName, appId, 0);
-            }
 
             mAppErrors.resetProcessCrashTimeLocked(packageName == null, appId, userId);
         }
@@ -4834,7 +4833,7 @@ public class ActivityManagerService extends IActivityManager.Stub
     }
 
     @GuardedBy("this")
-    private final boolean attachApplicationLocked(IApplicationThread thread,
+    private boolean attachApplicationLocked(@NonNull IApplicationThread thread,
             int pid, int callingUid, long startSeq) {
 
         // Find the application record that is being attached...  either via
@@ -5252,6 +5251,9 @@ public class ActivityManagerService extends IActivityManager.Stub
 
     @Override
     public final void attachApplication(IApplicationThread thread, long startSeq) {
+        if (thread == null) {
+            throw new SecurityException("Invalid application interface");
+        }
         synchronized (this) {
             int callingPid = Binder.getCallingPid();
             final int callingUid = Binder.getCallingUid();
